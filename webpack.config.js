@@ -7,8 +7,25 @@ const path = require('path');
 // outputには、出力するファイルの設定をします。
 // distというディレクトリに対して、ファイル名bundle.jsで出力します
 // publickPathは相対パスのリソースに自動的にdist/をつけてくれる
+// moduleのrulesセクションでは、webpackに対してビルド時に追加で行う処理を記述できる
+// .tsで終わるファイルに対して、ts-loaderを実行しています。
+// excludeで除外するファイルを正規表現で指定します。
+// node_modules 配下のファイルは特にビルドする必要がないので除外します
+// resolve セクションは、モジュールとして解決するファイルの拡張子を指定します。
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/index.ts',
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      },
+    ] 
+  },
+  resolve: {
+    extensions: ['.ts']
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
