@@ -32,11 +32,9 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: 'dist/'
   },
-  {
-    devServer: {
-      publicPath: '/dist',
-      hot: true,
-      open: true
-    }
+  devServer: {
+    publicPath: '/dist/',
+    hot: true,
+    open: true
   }
 };
