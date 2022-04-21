@@ -12,19 +12,20 @@ const path = require('path');
 // excludeで除外するファイルを正規表現で指定します。
 // node_modules 配下のファイルは特にビルドする必要がないので除外します
 // resolve セクションは、モジュールとして解決するファイルの拡張子を指定します。
+// Reactのファイルや外部ファイルも解決したいので、jsとtsxを追加した
 module.exports = {
-  entry: './src/index.ts',
+  entry: './src/index.tsx',
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.tsx?$/,
         use: 'ts-loader',
         exclude: /node_modules/
       },
     ] 
   },
   resolve: {
-    extensions: ['.ts']
+    extensions: ['.js', '.ts', '.tsx']
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
