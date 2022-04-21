@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require("path");
 
 // entryには、最初に読み込むファイルを指定する
 // ここで指定されたファイルに別のファイルを読み込む処理が書かれていると、
@@ -14,27 +14,22 @@ const path = require('path');
 // resolve セクションは、モジュールとして解決するファイルの拡張子を指定します。
 // Reactのファイルや外部ファイルも解決したいので、jsとtsxを追加した
 module.exports = {
-  entry: './src/index.tsx',
+  entry: "./src/index.tsx",
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/
+        use: "ts-loader",
+        exclude: /node_modules/,
       },
-    ] 
+    ],
   },
   resolve: {
-    extensions: ['.js', '.ts', '.tsx']
+    extensions: [".js", ".ts", ".tsx"],
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: 'dist/'
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js",
+    publicPath: "dist/",
   },
-  devServer: {
-    publicPath: '/dist/',
-    hot: true,
-    open: true
-  }
 };
