@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, Fragment } from "react";
 import styled from "styled-components";
 
 const Header = styled.header`
@@ -45,12 +45,35 @@ const Preview = styled.div`
   width: 50vw;
 `;
 
+// localStorageのキー
+// このキーは、データの参照・保存で使う
+// キー名はアプリケーションで重複させないように、「ファイルパス：値の名前」という
+// 命名規則にする。
+// localStorageのgetItemとsetItemを使って、データをローカルストレージに参照・保存する
+const StorageKey = "pages/editor:text";
+
+// useStateの初期値で型推論ができるなら、
+// useState<string>と書かなくて良い
+// 以下の場合、型推論でtextがstring型になっている
+// 数値のみで構成された配列の場合、初期値が空の配列のだと
+// useState([])で型推論できないので、
+// useState<number[]>([])と書く
+// The onChange event in React detects
+// when the value of an input element changes.
 export const Editor = (): JSX.Element => {
+  const [text, setText] = useState(localStorage.getItem(StorageKey) || "");
   return (
     <>
       <Header>最強のマークダウンエディター</Header>
       <Wrapper>
-        <TextArea value="テキスト入力エリア" />
+        <TextArea
+          value={text}
+          onChange={(e) => {
+            const changedText = e.target.value;
+            localStorage.setItem(StorageKey, changedText);
+            setText(changedText);
+          }}
+        />
         <Preview>プレビューエリア</Preview>
       </Wrapper>
     </>
