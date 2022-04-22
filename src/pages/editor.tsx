@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import styled from "styled-components";
 
 const Header = styled.header`
@@ -62,6 +62,11 @@ const StorageKey = "pages/editor:text";
 // when the value of an input element changes.
 export const Editor = (): JSX.Element => {
   const [text, setText] = useState(localStorage.getItem(StorageKey) || "");
+  useEffect(() => {
+    console.log(text);
+    console.log(StorageKey);
+  }, [text, StorageKey]);
+
   return (
     <>
       <Header>最強のマークダウンエディター</Header>
