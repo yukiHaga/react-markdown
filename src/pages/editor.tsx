@@ -6,26 +6,7 @@ import { putMemo } from "../indexeddb/memos";
 import { Button } from "../components/button";
 import { SaveModal } from "../components/save_modal";
 import { Link } from "react-router-dom";
-
-const Header = styled.header`
-  align-content: center;
-  display: flex;
-  font-size: 1.5rem;
-  height: 2rem;
-  justify-content: space-between;
-  left: 0;
-  line-height: 2rem;
-  padding: 0.5rem 1rem;
-  position: fixed;
-  right: 0;
-  top: 0;
-`;
-
-const HeaderControl = styled.div`
-  height: 2rem;
-  display: flex;
-  align-content: center;
-`;
+import { Header } from "../components/header";
 
 const Wrapper = styled.div`
   bottom: 0;
@@ -33,6 +14,13 @@ const Wrapper = styled.div`
   position: fixed;
   right: 0;
   top: 3rem;
+`;
+
+const HeaderArea = styled.div`
+  position: fixed;
+  right: 0;
+  top: 0;
+  left: 0;
 `;
 
 // position: absoluteにして位置をずらしている
@@ -83,14 +71,12 @@ export const Editor = (): JSX.Element => {
 
   return (
     <>
-      <Header>
-        究極のマークダウンエディター
-        <HeaderControl>
+      <HeaderArea>
+        <Header title="究極のマークダウンエディタ">
           <Button onClick={() => setShowModal(true)}>保存する</Button>
-        </HeaderControl>
-        <Link to="/history">履歴を見る</Link>
-      </Header>
-
+          <Link to="/history">履歴を見る</Link>
+        </Header>
+      </HeaderArea>
       <Wrapper>
         <TextArea value={text} onChange={(e) => setText(e.target.value)} />
         <Preview>
