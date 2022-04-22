@@ -1,5 +1,6 @@
-import { useState, Fragment, useEffect } from "react";
+import { useState, Fragment } from "react";
 import styled from "styled-components";
+import { useStateWithStorage } from "../hooks/use_state_with_storage";
 
 const Header = styled.header`
   font-size: 1.5rem;
@@ -61,24 +62,12 @@ const StorageKey = "pages/editor:text";
 // The onChange event in React detects
 // when the value of an input element changes.
 export const Editor = (): JSX.Element => {
-  const [text, setText] = useState(localStorage.getItem(StorageKey) || "");
-  useEffect(() => {
-    console.log(text);
-    console.log(StorageKey);
-  }, [text, StorageKey]);
-
+  const [text, setText] = useStateWithStorage("", StorageKey);
   return (
     <>
       <Header>最強のマークダウンエディター</Header>
       <Wrapper>
-        <TextArea
-          value={text}
-          onChange={(e) => {
-            const changedText = e.target.value;
-            localStorage.setItem(StorageKey, changedText);
-            setText(changedText);
-          }}
-        />
+        <TextArea value={text} onChange={(e) => setText(e.target.value)} />
         <Preview>プレビューエリア</Preview>
       </Wrapper>
     </>
