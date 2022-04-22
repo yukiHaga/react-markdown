@@ -1,5 +1,7 @@
-import { useState, Fragment, useEffect } from "react";
+import { useState, Fragment } from "react";
 import styled from "styled-components";
+import { useStateWithStorage } from "../hooks/use_state_with_storage";
+import * as ReactMarkdown from "react-markdown";
 
 const Header = styled.header`
   font-size: 1.5rem;
@@ -60,26 +62,17 @@ const StorageKey = "pages/editor:text";
 // useState<number[]>([])と書く
 // The onChange event in React detects
 // when the value of an input element changes.
+// ReactMarkdown内の文字のマークダウンがJSXに変換される
 export const Editor = (): JSX.Element => {
-  const [text, setText] = useState(localStorage.getItem(StorageKey) || "");
-  useEffect(() => {
-    console.log(text);
-    console.log(StorageKey);
-  }, [text, StorageKey]);
-
+  const [text, setText] = useStateWithStorage("", StorageKey);
   return (
     <>
       <Header>最強のマークダウンエディター</Header>
       <Wrapper>
-        <TextArea
-          value={text}
-          onChange={(e) => {
-            const changedText = e.target.value;
-            localStorage.setItem(StorageKey, changedText);
-            setText(changedText);
-          }}
-        />
-        <Preview>プレビューエリア</Preview>
+        <TextArea value={text} onChange={(e) => setText(e.target.value)} />
+        <Preview>
+          <ReactMarkdown>{text}</ReactMarkdown>
+        </Preview>
       </Wrapper>
     </>
   );
