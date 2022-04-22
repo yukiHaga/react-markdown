@@ -53,7 +53,10 @@ const Preview = styled.div`
 // キー名はアプリケーションで重複させないように、「ファイルパス：値の名前」という
 // 命名規則にする。
 // localStorageのgetItemとsetItemを使って、データをローカルストレージに参照・保存する
-const StorageKey = "pages/editor:text";
+type Props = {
+  text: string;
+  setText: (text: string) => void;
+};
 
 // useStateの初期値で型推論ができるなら、
 // useState<string>と書かなくて良い
@@ -64,9 +67,7 @@ const StorageKey = "pages/editor:text";
 // The onChange event in React detects
 // when the value of an input element changes.
 // ReactMarkdown内の文字のマークダウンがJSXに変換される
-export const Editor = (): JSX.Element => {
-  const [text, setText] = useStateWithStorage("", StorageKey);
-
+export const Editor = ({ text, setText }: Props): JSX.Element => {
   const [showModal, setShowModal] = useState(false);
 
   return (

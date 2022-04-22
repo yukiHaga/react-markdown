@@ -1,7 +1,7 @@
 import Dexie from "dexie";
 
 // IndexedDBのオブジェクトストアに保存するデータの型を定義する
-type MemoRecord = {
+export type MemoRecord = {
   datetime: string;
   title: string;
   text: string;
@@ -30,4 +30,9 @@ const memos: Dexie.Table<MemoRecord, string> = database.table("memos");
 export const putMemo = async (title: string, text: string): Promise<void> => {
   const datetime = new Date().toString();
   await memos.put({ datetime, title, text });
+};
+
+// toArrayで取得したデータを配列にしている
+export const getMemos = (): Promise<MemoRecord[]> => {
+  return memos.orderBy("datetime").reverse().toArray();
 };
