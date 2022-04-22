@@ -1,7 +1,9 @@
 import * as React from "react";
 import { render } from "react-dom";
 import { Editor } from "./pages/editor";
+import { History } from "./pages/history";
 import { createGlobalStyle } from "styled-components";
+import { HashRouter as Router, Route, Navigate } from "react-router-dom";
 
 // styled-componentsのcreateGlobalStyleを使って、
 // ページ全体に適用できるスタイルを定義しています。
@@ -22,7 +24,11 @@ const GlobalStyle = createGlobalStyle`
 const Main = (
   <>
     <GlobalStyle />
-    <Editor />
+    <Router>
+      <Route path="/editor" element={<Editor />} />
+      <Route path="/history" element={<History />} />
+      <Route path="/*" element={<Navigate to="/editor" replace />} />
+    </Router>
   </>
 );
 render(Main, document.getElementById("app"));
