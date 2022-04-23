@@ -1,12 +1,15 @@
-import { useState, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import styled from "styled-components";
 import { useStateWithStorage } from "../hooks/use_state_with_storage";
-import * as ReactMarkdown from "react-markdown";
 import { putMemo } from "../indexeddb/memos";
 import { Button } from "../components/button";
 import { SaveModal } from "../components/save_modal";
 import { Link } from "react-router-dom";
 import { Header } from "../components/header";
+import ConvertMarkdownWorker from "worker-loader!../worker/convert_markdown_worker";
+
+// Workerのインスタンスを生成している
+const convertMarkdownWorker = new ConvertMarkdownWorker();
 
 const Wrapper = styled.div`
   bottom: 0;
@@ -69,6 +72,18 @@ type Props = {
 // ReactMarkdown内の文字のマークダウンがJSXに変換される
 export const Editor = ({ text, setText }: Props): JSX.Element => {
   const [showModal, setShowModal] = useState(false);
+  const [html, setHtml] = useState("");
+
+  // 初回のみWorkerから結果を受け取る関数を登録しておきます
+  useEffect(() => {
+    convertMarkdownWorker.onmessage = (event) => {
+      setHtml(event.data.html);
+    };
+  }, []);
+
+  useEffect(() => {
+    convertMarkdownWorker.postMessage(text);
+  }, [text]);
 
   return (
     <>
@@ -81,7 +96,7 @@ export const Editor = ({ text, setText }: Props): JSX.Element => {
       <Wrapper>
         <TextArea value={text} onChange={(e) => setText(e.target.value)} />
         <Preview>
-          <ReactMarkdown>{text}</ReactMarkdown>
+          <div dangerouslySetInnerHTML={{ __html: html }} />
         </Preview>
       </Wrapper>
       {showModal && (
