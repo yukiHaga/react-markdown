@@ -4,6 +4,7 @@ import { Editor } from "./pages/editor";
 import { History } from "./pages/history";
 import { createGlobalStyle } from "styled-components";
 import { HashRouter as Router, Route, Navigate } from "react-router-dom";
+import { useStateWithStorage } from "./hooks/use_state_with_storage";
 
 // styled-componentsのcreateGlobalStyleを使って、
 // ページ全体に適用できるスタイルを定義しています。
@@ -18,17 +19,26 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const StorageKey = "/editor:text";
+
 // styled-componentsのグローバルスタイルを適用させるためには、
 // createGlobalStyleで作ったGlobalStyleを、
 // リアクトツリーの最上位のコンポーネントの中にGlobalStyleを書く
-const Main = (
-  <>
-    <GlobalStyle />
-    <Router>
-      <Route path="/editor" element={<Editor />} />
-      <Route path="/history" element={<History />} />
-      <Route path="/*" element={<Navigate to="/editor" replace />} />
-    </Router>
-  </>
-);
-render(Main, document.getElementById("app"));
+// useStateを使うために、Mainを関数化する
+const Main = (): JSX.Element => {
+  const [text, setText] = useStateWithStorage("", StorageKey);
+  return (
+    <>
+      <GlobalStyle />
+      <Router>
+        <Route
+          path="/editor"
+          element={<Editor text={text} setText={setText} />}
+        />
+        <Route path="/history" element={<History setText={setText} />} />
+        <Route path="/*" element={<Navigate to="/editor" replace />} />
+      </Router>
+    </>
+  );
+};
+render(<Main />, document.getElementById("app"));
