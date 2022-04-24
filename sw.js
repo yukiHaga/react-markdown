@@ -32,6 +32,7 @@ const networkFallingBackToCache = async (request) => {
 // ここにサービスワーカーは介入できるので、リソース取得に対して様々な処理を挟むことができます。
 // event.respondWith は先ほど説明したとおり、非同期処理を待機して結果を返却してくれるメソッドです。
 // networkFallingBackToCache(event.request) は作成した関数にリクエストを渡しています。
+// event.request にメインスレッドからのリクエスト内容が格納されています。
 self.addEventListener("fetch", (event) => {
   event.respondWith(networkFallingBackToCache(event.request));
 });
